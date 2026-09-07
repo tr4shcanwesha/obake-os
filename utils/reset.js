@@ -96,11 +96,59 @@ window.__openMyFiles = ()=>{
 };
 
 function shutDown(){
-  showMessageBox(
-    'Shut Down',
-    "It's now safe to close this browser tab. (Or don't. Fourier certainly won't judge you.)",
-    'computer'
-  );
+  const overlay = document.createElement('div');
+  overlay.className = 'msgbox-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'msgbox';
+  box.style.left = '50%';
+  box.style.top = '38%';
+  box.style.transform = 'translate(-50%,-50%)';
+  box.innerHTML = `
+    <div class="titlebar">
+      <div class="ttext">Shut Down</div>
+      <div class="tbtn mb-close">×</div>
+    </div>
+    <div class="msgbox-body">
+      <img src="${ICON_URLS.computer}" width="32" height="32">
+      <div class="txt">Are you sure you want to turn off this computer?</div>
+    </div>
+    <div class="msgbox-buttons reset-buttons">
+      <button class="btn95 mb-yes">Yes</button>
+      <button class="btn95 mb-no">No</button>
+    </div>
+  `;
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  const close = ()=>overlay.remove();
+  const message = box.querySelector('.txt');
+
+  box.querySelector('.mb-close').onclick = close;
+  box.querySelector('.mb-no').onclick = close;
+  box.querySelector('.mb-yes').onclick = ()=>{
+    message.classList.add('shutdown-status');
+    message.textContent = 'Turning off.';
+    box.querySelector('.msgbox-buttons').remove();
+    box.querySelector('.mb-close').remove();
+
+    setTimeout(()=>{
+      message.textContent = 'Turning off..';
+    }, 750);
+
+    setTimeout(()=>{
+      message.textContent = 'Turning off...';
+    }, 1500);
+
+    setTimeout(()=>{
+      SessionStorage.clear();
+      window.close();
+      setTimeout(()=>{
+        window.location.replace('about:blank');
+      }, 100);
+    }, 2250);
+  };
 }
 
 function resetDesktopLayout(){
