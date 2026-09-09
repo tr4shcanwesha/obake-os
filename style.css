@@ -486,3 +486,80 @@ body {
 
 /* Dialog button container - centered button layout */
 .msgbox-buttons { display:flex; justify-content:center; padding:8px; gap: 12px;}
+
+/* ---------- Notepad (Text Viewer) ---------- */
+.tv-tabbar{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 3px 3px 0;
+  background: #c0c0c0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.tv-tab{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 160px;
+  padding: 3px 6px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #c0c0c0;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
+  box-shadow:
+    inset 1px 1px 0 #fff,
+    inset -1px 0 0 #808080;
+  border-top: 1px solid #fff;
+}
+
+.tv-tab.active{
+  background: #fff;
+  top: 0;
+  z-index: 1;
+  font-weight: bold;
+  box-shadow:
+    inset 1px 1px 0 #fff,
+    inset -1px 0 0 #808080;
+}
+
+.tv-tab-label{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tv-tab-close{
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  line-height: 13px;
+  text-align: center;
+  font-size: 11px;
+  color: #000;
+}
+
+.tv-tab-close:hover{
+  background: #808080;
+  color: #fff;
+}
+
+.tv-content{
+  background: #fff;
+  border-top: 1px solid #808080;
+  box-shadow: inset 1px 1px 0 #000;
+  height: calc(100% - 27px);
+  overflow: auto;
+}
+
+.tv-pre{
+  margin: 0;
+  padding: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+}

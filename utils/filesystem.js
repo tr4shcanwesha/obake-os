@@ -194,6 +194,7 @@ function openFileViewMenu(winId, menuItem){
   const existingMenu = win.querySelector('.file-view-menu');
   if(existingMenu){
     existingMenu.remove();
+    document.removeEventListener('click', win.__fileViewMenuOutsideHandler, true);
     return;
   }
 
@@ -214,6 +215,18 @@ function openFileViewMenu(winId, menuItem){
     if(option) setFileView(winId, option.dataset.view);
   });
   win.appendChild(menu);
+
+  const outsideHandler = (event)=>{
+    if(menu.contains(event.target) || event.target === menuItem) return;
+    menu.remove();
+    document.removeEventListener('click', outsideHandler, true);
+  };
+  win.__fileViewMenuOutsideHandler = outsideHandler;
+
+  // defer so this same click (opening the menu) doesn't immediately close it
+  setTimeout(()=>{
+    document.addEventListener('click', outsideHandler, true);
+  }, 0);
 }
 
 function docListWindow(winId, title, iconKey, docs, statusText){
@@ -253,7 +266,7 @@ function openFile(winId, idx){
   if(isEvidenceFile(file) && localStorage.getItem(EVIDENCE_UNLOCK_KEY) !== 'true'){
     requestEvidencePassword(winId, file);
   } else if(isImageFile(file)) openImage(winId, file);
-  else openDoc(winId, idx);
+  else openTextFile(file);
 }
 
 function requestEvidencePassword(winId, file){
